@@ -9,6 +9,22 @@ import (
 	"strings"
 )
 
+func q1(rot byte, val int, pos *int, res *int) {
+	if strings.ToUpper(string(rot)) == "L" {
+			r := (*pos - val) % 100
+			if r < 0 {
+				*pos = 100 + r
+			} else {
+				*pos = r
+			}
+		} else {
+			*pos = (*pos + val) % 100
+		}
+	if *pos == 0 {
+		*res ++
+	}
+}
+
 func main() {
 	file, err := os.Open("input.txt")
 	if err != nil {
@@ -19,8 +35,8 @@ func main() {
 
 	scanner := bufio.NewScanner(file)
 
-	res := 0
 	pos := 50
+	res := 0
 
 	for scanner.Scan() {
 		text := scanner.Text()
@@ -37,21 +53,8 @@ func main() {
 			fmt.Println("error converting number")
 			return
 		}
-
-		if strings.ToUpper(string(rot)) == "L" {
-			r := (pos - val) % 100
-			if r < 0 {
-				pos = 100 + r
-			} else {
-				pos = r
-			}
-		} else {
-			pos = (pos + val) % 100
-		}
-
-		if pos == 0 {
-			res++
-		}
+		
+		q1(rot, val, &pos, &res)
 	}
 
 	if err := scanner.Err(); err != nil {
