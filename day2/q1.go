@@ -67,7 +67,7 @@ func trimRange(start, end string) (int, int) {
 }
 
 func sumOfInvalid(start, end int) int {
-	//var sum int
+	var sum int
 
 	str1 := strconv.Itoa(start)
 	str2 := strconv.Itoa(end)
@@ -78,9 +78,29 @@ func sumOfInvalid(start, end int) int {
 
 	start, end = trimRange(str1, str2)
 	
-	fmt.Println(start, end)
-	return 0
+	//fmt.Println(start, end)
+	
+	str1 = strconv.Itoa(start)
+	str2 = strconv.Itoa(end)
+	
+	denominator := int(math.Pow(10, float64(len(str1) / 2)))
 
+	startRange := start / denominator
+	endRange := end / denominator
+
+	for i := startRange; i <= endRange; i++ {
+		sum += i * denominator + i
+	}
+
+	if startRange * denominator + startRange < start {
+		sum -= startRange * denominator + startRange
+	}
+
+	if endRange * denominator + endRange > end {
+		sum -= endRange * denominator + endRange
+	}
+	
+	return sum
 }
 
 func main() {
@@ -96,4 +116,6 @@ func main() {
 		//fmt.Printf("Range: %d -> %d\n", p.Start, p.End)
 		sum += sumOfInvalid(p.Start, p.End)
 	}
+
+	fmt.Println(sum)
 }
