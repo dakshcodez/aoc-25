@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"strings"
-	"os"
 	"log"
+	"math"
+	"os"
 	"strconv"
+	"strings"
 )
 
 type NumberPair struct {
@@ -46,14 +47,53 @@ func createGrid(filename string) ([]NumberPair, error) {
 	return grid, nil
 }
 
+func trimRange(start, end string) (int, int) {
+	var newStart int
+	var newEnd int
+
+	if len(start) % 2 != 0 {
+		newStart = int(math.Pow(10, float64(len(start))))
+	} else {
+		newStart, _ = strconv.Atoi(start)
+	}
+
+	if len(end) % 2 != 0 {
+		newEnd = int(math.Pow(10, float64(len(end) - 1))) - 1
+	} else {
+		newEnd, _ = strconv.Atoi(end)
+	}
+
+	return newStart, newEnd
+}
+
+func sumOfInvalid(start, end int) int {
+	//var sum int
+
+	str1 := strconv.Itoa(start)
+	str2 := strconv.Itoa(end)
+
+	if len(str1) % 2 != 0 && len(str2) % 2 != 0 && len(str1) == len(str2) {
+		return 0
+	}
+
+	start, end = trimRange(str1, str2)
+	
+	fmt.Println(start, end)
+	return 0
+
+}
+
 func main() {
 	data, err := createGrid("input.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
 	
-	// fmt.Println("Successfully created grid:")
-	// for _, p := range data {
-	// 	fmt.Printf("Range: %d -> %d\n", p.Start, p.End)
-	// }
+	var sum int
+
+	fmt.Println("Successfully created grid:")
+	for _, p := range data {
+		//fmt.Printf("Range: %d -> %d\n", p.Start, p.End)
+		sum += sumOfInvalid(p.Start, p.End)
+	}
 }
